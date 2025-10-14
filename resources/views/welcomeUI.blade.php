@@ -1,19 +1,25 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome Page</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body class="p-4">
+@extends('layouts.app')
 
-    <h1 class="text-center text-primary">ようこそ！</h1>
-    <p class="text-center">ここからUIを整えていきます。</p>
+@section('title', 'ようこそ')
 
-    <div class="text-center mt-3">
-        <a href="/login" class="btn btn-secondary">ログインページへ</a>
-        <a href="/tasks" class="btn btn-success">タスク一覧へ</a>
+@section('content')
+<div class="py-12">
+  <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+      <div class="p-6 text-gray-900 dark:text-gray-100 text-center">
+        <h1 class="text-4xl font-bold mb-4 text-blue-500">ようこそ!</h1>
+        <p class="text-lg mb-8">タスク管理アプリへようこそ。さあ、始めましょう!</p>
+
+        <div class="flex justify-center gap-4">
+          <a href="{{ route('login') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded">
+            ログインページへ
+          </a>
+          <a href="{{ route('tasks.index') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded">
+            タスク一覧へ
+          </a>
+        </div>
+      </div>
     </div>
-
-</body>
-</html>
+  </div>
+</div>
+@endsection
