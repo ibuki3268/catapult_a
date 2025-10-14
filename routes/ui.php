@@ -18,3 +18,12 @@ Route::delete('/tasks/{id}', [PageController::class, 'taskDestroy'])->name('task
 
 // マイページ
 Route::get('/mypage', [PageController::class, 'mypage'])->name('mypage');
+// 検索
+Route::get('/tasks/search', [PageController::class, 'taskSearch'])->name('tasks.search');
+
+// 共有メンバー
+Route::get('/shared/members', [PageController::class, 'sharedMembers'])->name('shared.members');
+
+// 完了タスク削除
+Route::get('/tasks/delete-completed', [PageController::class, 'deleteCompletedView'])->name('tasks.deleteCompleted');
+Route::delete('/tasks/delete-completed', [PageController::class, 'deleteCompletedExecute'])->name('tasks.deleteCompleted');
