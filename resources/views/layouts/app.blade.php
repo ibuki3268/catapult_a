@@ -81,7 +81,7 @@
     <!-- 固定ボタン(画面下部) -->
     <div class="fixed bottom-8 left-0 right-0 flex justify-between px-8 pointer-events-none">
         <!-- ゴミ箱ボタン -->
-        <a href="{{ route('tasks.deleteCompleted') }}" 
+            <a href="{{ route('tasks.deleteCompleted.view') }}" 
            class="pointer-events-auto w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition shadow-lg"
            onclick="return confirm('完了したタスクを削除しますか?');">
             <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
