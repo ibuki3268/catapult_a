@@ -9,6 +9,135 @@
     <!-- Tailwind CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+<!-- 画面下部に固定されるアヒル -->
+<div id="duck" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50px;
+    font-size: 60px;
+    cursor: pointer;
+    z-index: 9999;
+    transition: all 0.3s ease;
+">
+    🦆
+</div>
+
+<!-- 音声ファイル（クワック音） -->
+<audio id="quackSound" preload="auto">
+    <source src="https://cdn.freesound.org/previews/607/607290_1648170-lq.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 画面下部を歩くアヒル -->
+<div id="duck" style="
+    position: fixed;
+    bottom: 20px;
+    left: 0px;
+    font-size: 60px;
+    cursor: pointer;
+    z-index: 9999;
+    transition: transform 0.3s ease;
+">
+    🦆
+</div>
+
+<!-- 音声ファイル（クワック音） -->
+<audio id="quackSound" preload="auto">
+    <source src="https://cdn.freesound.org/previews/607/607290_1648170-lq.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const duck = document.getElementById('duck');
+const quackSound = document.getElementById('quackSound');
+let isAnimating = false;
+let position = 0;
+let direction = 1; // 1=右へ、-1=左へ
+let walkInterval;
+
+// 普段は下を左右に歩く
+function walk() {
+    if (isAnimating) return;
+    
+    position += direction * 2;
+    
+    // 画面端に到達したら反対向きに
+    if (position >= window.innerWidth - 80) {
+        direction = -1;
+        duck.style.transform = 'scaleX(-1)'; // 左向き
+    } else if (position <= 0) {
+        direction = 1;
+        duck.style.transform = 'scaleX(1)'; // 右向き
+    }
+    
+    duck.style.left = position + 'px';
+}
+
+// 歩き始める
+walkInterval = setInterval(walk, 30);
+
+// クリックしたら暴れる
+duck.addEventListener('click', function() {
+    if (isAnimating) return;
+    isAnimating = true;
+    
+    // 歩くのを一時停止
+    clearInterval(walkInterval);
+    
+    // 音を鳴らす
+    quackSound.currentTime = 0;
+    quackSound.play().catch(e => console.log('音声再生エラー'));
+    
+    // ジャンプして回転
+    duck.style.transition = 'all 0.5s ease';
+    duck.style.transform = 'translateY(-150px) scale(1.5) rotate(360deg)';
+    duck.style.bottom = '20px';
+    
+    setTimeout(() => {
+        duck.style.transform = 'translateY(0) scale(1) rotate(0deg)';
+    }, 500);
+    
+    // ランダムに画面上を飛び回る
+    setTimeout(() => {
+        const randomX = Math.random() * (window.innerWidth - 100);
+        const randomY = Math.random() * (window.innerHeight / 2); // 上半分だけ
+        
+        duck.style.left = randomX + 'px';
+        duck.style.bottom = randomY + 'px';
+        
+        // くるくる回る
+        duck.style.transition = 'all 1s ease';
+        duck.style.transform = 'rotate(720deg) scale(1.8)';
+        
+        setTimeout(() => {
+            // 元の位置（下）に戻る
+            duck.style.transition = 'all 0.8s ease';
+            duck.style.bottom = '20px';
+            duck.style.left = position + 'px';
+            duck.style.transform = direction === 1 ? 'scaleX(1)' : 'scaleX(-1)';
+            
+            setTimeout(() => {
+                // 歩き再開
+                isAnimating = false;
+                walkInterval = setInterval(walk, 30);
+            }, 800);
+        }, 1000);
+    }, 600);
+});
+
+// マウスを乗せたら少し大きくなる
+duck.addEventListener('mouseenter', function() {
+    if (!isAnimating) {
+        const currentScale = direction === 1 ? 'scaleX(1.2)' : 'scaleX(-1.2)';
+        duck.style.transform = currentScale + ' scaleY(1.2)';
+    }
+});
+
+duck.addEventListener('mouseleave', function() {
+    if (!isAnimating) {
+        duck.style.transform = direction === 1 ? 'scaleX(1)' : 'scaleX(-1)';
+    }
+});
+</script>
+
 <body class="bg-[#D6D9CC] text-white min-h-screen">
     
     <!-- ヘッダー -->
