@@ -9,7 +9,7 @@
     <!-- Tailwind CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-black text-white min-h-screen">
+<body class="bg-[#D6D9CC] text-white min-h-screen">
     
     <!-- ヘッダー -->
     <header class="bg-white border-b border-gray-800 fixed top-0 left-0 right-0 z-50">

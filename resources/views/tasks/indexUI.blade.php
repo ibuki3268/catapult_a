@@ -5,7 +5,7 @@
 @section('content')
 <!-- タブ -->
 <div class="flex border-b border-gray-700 mb-6">
-    <button class="px-6 py-3 border-b-2 border-teal-400 text-teal-400 font-semibold">やること</button>
+    <button class="px-6 py-3 border-b-2 text-[#03588C] font-semibold">やること</button>
     <button class="px-6 py-3 text-gray-400">+</button>
 </div>
 
