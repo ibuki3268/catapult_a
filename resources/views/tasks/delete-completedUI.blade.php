@@ -11,7 +11,7 @@
         <p class="text-3xl font-bold text-teal-400">{{ $completedCount ?? 0 }}件</p>
     </div>
 
-    <form method="POST" action="{{ route('tasks.deleteCompleted') }}">
+    <form method="POST" action="{{ route('tasks.deleteCompleted.execute') }}">
         @csrf
         @method('DELETE')
         <button type="submit" class="w-full bg-red-500 text-white font-bold py-3 rounded-lg hover:bg-red-600 mb-3">
