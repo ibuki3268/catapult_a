@@ -9,10 +9,8 @@
     <!-- Tailwind CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[#D6D9CC] text-white min-h-screen">
-    
-    <!-- ヘッダー -->
-    <header class="bg-white border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
+<body style="background-image: url('{{ asset('images/common/bg-brown.jpg') }}'); background-size: cover; background-position: center; background-attachment: fixed;" class="text-white min-h-screen">    <!-- ロゴ -->
+    <header class="bg-[#FFFFFF] border-b border-gray-800 fixed top-0 left-0 right-0 z-50">       
         <div class="max-w-screen-xl mx-auto px-5 h-16 flex items-center justify-between">
             
             <!-- ロゴ -->
