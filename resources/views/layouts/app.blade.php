@@ -12,7 +12,7 @@
 <body class="bg-black text-white min-h-screen">
     
     <!-- ヘッダー -->
-    <header class="bg-black border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
+    <header class="bg-white border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
         <div class="max-w-screen-xl mx-auto px-5 h-16 flex items-center justify-between">
             
             <!-- ロゴ -->
@@ -23,28 +23,28 @@
             <!-- メニュー(PC表示) -->
             <nav class="hidden md:block">
                 <ul class="flex gap-8">
-                    <li><a href="{{ route('tasks.index') }}" class="text-white hover:text-teal-400 transition">タスク一覧</a></li>
-                    <li><a href="{{ route('tasks.create') }}" class="text-white hover:text-teal-400 transition">新規作成</a></li>
-                    <li><a href="{{ route('mypage') }}" class="text-white hover:text-teal-400 transition">マイページ</a></li>
-                    <li><a href="{{ route('shared.members') }}" class="text-white hover:text-teal-400 transition">共有メンバー</a></li>
+                    <li><a href="{{ route('tasks.index') }}" class="text-black hover:text-teal-600 transition">タスク一覧</a></li>
+                    <li><a href="{{ route('tasks.create') }}" class="text-black hover:text-teal-600 transition">新規作成</a></li>
+                    <li><a href="{{ route('mypage') }}" class="text-black hover:text-teal-600 transition">マイページ</a></li>
+                    <li><a href="{{ route('shared.members') }}" class="text-black hover:text-teal-600 transition">共有メンバー</a></li>
                 </ul>
             </nav>
             
             <!-- ハンバーガーボタン(スマホ表示) -->
             <button id="menuToggle" class="md:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5">
-                <span class="w-6 h-0.5 bg-white"></span>
-                <span class="w-6 h-0.5 bg-white"></span>
-                <span class="w-6 h-0.5 bg-white"></span>
+                <span class="w-6 h-0.5 bg-black"></span>
+                <span class="w-6 h-0.5 bg-black"></span>
+                <span class="w-6 h-0.5 bg-black"></span>
             </button>
         </div>
         
         <!-- スマホメニュー -->
-        <div id="mobileMenu" class="hidden md:hidden bg-gray-900 border-t border-gray-800">
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100">
             <ul class="py-4">
-                <li><a href="{{ route('tasks.index') }}" class="block px-5 py-3 hover:bg-gray-800">タスク一覧</a></li>
-                <li><a href="{{ route('tasks.create') }}" class="block px-5 py-3 hover:bg-gray-800">新規作成</a></li>
-                <li><a href="{{ route('mypage') }}" class="block px-5 py-3 hover:bg-gray-800">マイページ</a></li>
-                <li><a href="{{ route('shared.members') }}" class="block px-5 py-3 hover:bg-gray-800">共有メンバー</a></li>
+                <li><a href="{{ route('tasks.index') }}" class="block px-5 py-3 text-black hover:bg-gray-100 transition">タスク一覧</a></li>
+                <li><a href="{{ route('tasks.create') }}" class="block px-5 py-3 text-black hover:bg-gray-100 transition">新規作成</a></li>
+                <li><a href="{{ route('mypage') }}" class="block px-5 py-3 text-black hover:bg-gray-100 transition">マイページ</a></li>
+                <li><a href="{{ route('shared.members') }}" class="block px-5 py-3 text-black hover:bg-gray-100 transition">共有メンバー</a></li>
             </ul>
         </div>
     </header>
