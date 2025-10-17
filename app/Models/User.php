@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Task;
 
 class User extends Authenticatable
 {
@@ -44,5 +45,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // ユーザーが共有されているタスクを取得
+    public function sharedTasks()
+    {
+        return $this->belongsToMany(
+            Task::class, 
+            'task_share', 
+            'shared_with_user_id', 
+            'task_id'
+            )->withPivot('premission');
     }
 }
