@@ -18,31 +18,58 @@
     <button onclick="openCreateListModal()" class="px-6 py-3 text-gray-700 hover:text-[#03588C] transition">+</button>
 </div>
 
-<!-- リスト名変更ボタン -->
-<div class="flex justify-end gap-4 mb-4 text-sm">
-    <button onclick="openEditListModal()" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
+<!-- 編集・その他ボタン -->
+<div class="flex justify-end gap-4 mb-4 text-sm relative">
+    <!-- 編集ボタン -->
+    <button onclick="alert('編集モードはまだ実装されていません')" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
         <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
-        <span class="text-gray-700">リスト名変更</span>
+        <span class="text-gray-700">編集</span>
     </button>
-    <button onclick="alert('その他メニューはまだ実装されていません')" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
-        <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-        </svg>
-        <span class="text-gray-700">その他</span>
-    </button>
+    
+    <!-- その他ボタン(メニュー付き) -->
+    <div class="relative z-50">
+        <button onclick="toggleOtherMenu()" id="otherMenuBtn" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
+            <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+            </svg>
+            <span class="text-gray-700">その他</span>
+        </button>
+        
+        <!-- その他メニュー -->
+        <div id="otherMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-[100]">
+            <ul class="py-2">
+                <li>
+                    <button onclick="openEditListModal(); toggleOtherMenu();" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition flex items-center gap-2">
+                        <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                        </svg>
+                        <span class="text-gray-700">リスト名変更</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="alert('リスト削除機能はまだ実装されていません'); toggleOtherMenu();" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition flex items-center gap-2">
+                        <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        <span class="text-red-600">リスト削除</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 <!-- タスクリスト -->
 <div class="space-y-3">
     @forelse ($tasks ?? [] as $task)
     <div class="bg-white/90 backdrop-blur-sm rounded-lg p-4 flex items-start gap-3 hover:bg-white transition shadow-md">
-     <input type="checkbox"
-         class="w-5 h-5 mt-1 rounded border-gray-400 text-[#03588C] focus:ring-[#03588C] cursor-pointer task-done-checkbox"
-         data-task-id="{{ $task->id }}"
-         @if($task->done) checked @endif
-     >
+        <input type="checkbox"
+            class="w-5 h-5 mt-1 rounded border-gray-400 text-[#03588C] focus:ring-[#03588C] cursor-pointer task-done-checkbox"
+            data-task-id="{{ $task->id }}"
+            @if($task->done) checked @endif
+        >
         
         <div class="flex-1">
             <h3 class="font-medium text-gray-800">{{ $task->title }}</h3>
@@ -98,6 +125,7 @@
 <script>
     // タスクdoneトグル
     document.addEventListener('DOMContentLoaded', function() {
+        // タスクチェックボックス
         document.querySelectorAll('.task-done-checkbox').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 const taskId = this.dataset.taskId;
@@ -115,16 +143,20 @@
                     if (!res.ok) throw new Error('更新に失敗しました');
                     return res.json();
                 })
-                .then(data => {
-                    // 成功時は何もしない（UIは既に反映済み）
-                })
                 .catch(err => {
                     alert('更新に失敗しました');
-                    this.checked = !this.checked; // 元に戻す
+                    this.checked = !this.checked;
                 });
             });
         });
+
+        // 固定ボタンを表示
+        const taskButtons = document.getElementById('taskButtons');
+        if (taskButtons) {
+            taskButtons.classList.remove('hidden');
+        }
     });
+
     // 新規リスト作成モーダル
     function openCreateListModal() {
         document.getElementById('createListModal').classList.remove('hidden');
@@ -141,6 +173,21 @@
         document.getElementById('editListModal').classList.add('hidden');
     }
 
+    // その他メニュー
+    function toggleOtherMenu() {
+        const menu = document.getElementById('otherMenu');
+        menu.classList.toggle('hidden');
+    }
+
+    // メニュー外クリックで閉じる
+    document.addEventListener('click', (e) => {
+        const menu = document.getElementById('otherMenu');
+        const btn = document.getElementById('otherMenuBtn');
+        if (menu && !menu.contains(e.target) && !btn.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
+    });
+
     // モーダル外クリックで閉じる
     document.getElementById('createListModal').addEventListener('click', (e) => {
         if (e.target === e.currentTarget) closeCreateListModal();
@@ -148,21 +195,11 @@
     document.getElementById('editListModal').addEventListener('click', (e) => {
         if (e.target === e.currentTarget) closeEditListModal();
     });
-
-    // ドロップダウンの外側クリックで閉じる
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('dropdownMenu');
-        const button = event.target.closest('button[onclick*="toggleDropdown"]');
-        
-        if (dropdown && !dropdown.contains(event.target) && !button) {
-            dropdown.classList.add('hidden');
-        }
-    });
-</script> 
-
-
+</script>
 @endsection
-<div class="fixed bottom-8 left-0 right-0 flex justify-between px-8 pointer-events-none z-[60]">
+
+<!-- 固定ボタン(画面下部) -->
+<div id="taskButtons" class="hidden fixed bottom-8 left-0 right-0 flex justify-between px-8 pointer-events-none z-[60]">
     <!-- ゴミ箱ボタン -->
     <a href="{{ route('tasks.deleteCompleted.view') }}" 
        class="pointer-events-auto w-16 h-16 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition shadow-lg"
@@ -180,4 +217,3 @@
         </svg>
     </a>
 </div>
-
