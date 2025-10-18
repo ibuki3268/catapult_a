@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskShareController;
 use Illuminate\Support\Facades\Route;
 
 // トップ・ログイン
@@ -39,4 +40,11 @@ Route::get('/shared/members', [PageController::class, 'sharedMembers'])->name('s
 Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
 Route::put('/lists/{id}', [ListController::class, 'update'])->name('lists.update');
 Route::delete('/lists/{id}', [ListController::class, 'destroy'])->name('lists.destroy');
+// ユーザーIDを指定して、共有相手を追加
+Route::post('/share/{user}', [TaskShareController::class, 'create'])
+     ->name('share.create');
+    
+// 共有相手の削除
+Route::delete('/share/{user}', [TaskShareController::class, 'destroy'])
+     ->name('share.destroy');
 
