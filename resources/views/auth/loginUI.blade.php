@@ -3,7 +3,7 @@
 @section('title', 'ログイン')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+<div class="min-h-[calc(100vh-160px)] flex items-center justify-center py-8">
   <div class="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
     <h1 class="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">ログイン</h1>
     
