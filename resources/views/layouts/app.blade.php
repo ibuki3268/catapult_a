@@ -17,6 +17,8 @@
             <a href="{{ route('welcome') }}" class="block">
                 <img src="{{ asset('images/common/nezumi.jpg') }}" alt="Task App Logo" class="h-8 w-auto">
             </a>
+
+            <h1 class="text-2xl font-bold text-white absolute left-1/2 transform -translate-x-1/2">ToDo List</h1>
             
             <!-- メニュー(PC表示) -->
             <nav class="hidden md:block">
@@ -82,7 +84,7 @@
             <a href="{{ route('tasks.deleteCompleted.view') }}" 
            class="pointer-events-auto w-16 h-16 flex items-center justify-center hover:scale-110 transition"
            onclick="return confirm('完了したタスクを削除しますか?');">
-            <svg class="w-12 h-12 text-teal-400 drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-12 h-12 text-[#5BCCF8] drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
         </a>
@@ -90,7 +92,7 @@
         <!-- プラスボタン -->
         <a href="{{ route('tasks.create') }}" 
            class="pointer-events-auto w-16 h-16 flex items-center justify-center hover:scale-110 transition">
-            <svg class="w-8 h-8 text-[#F5D530] drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-[#5BCCF8] drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>
             </svg>
         </a>
