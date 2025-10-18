@@ -3,19 +3,28 @@
 @section('title', 'やること')
 
 @section('content')
-<!-- タブ -->
-<div class="flex border-b border-gray-700 mb-6">
-    <button class="px-6 py-3 border-b-2 text-[#03588C] font-semibold">やること</button>
-    <button class="px-6 py-3 text-gray-400">+</button>
+<!-- タブ(リスト一覧) -->
+<div class="flex border-b border-gray-800 mb-6 bg-white/80 backdrop-blur-sm rounded-t-lg overflow-x-auto">
+    @forelse ($lists ?? [] as $list)
+    <a href="{{ route('tasks.index', ['list_id' => $list->id]) }}" 
+       class="px-6 py-3 border-b-2 {{ $currentListId == $list->id ? 'border-[#03588C] text-[#03588C]' : 'border-transparent text-gray-700' }} font-semibold hover:text-[#03588C] transition whitespace-nowrap">
+        {{ $list->name }}
+    </a>
+    @empty
+    <button class="px-6 py-3 border-b-2 border-[#03588C] text-[#03588C] font-semibold">やること</button>
+    @endforelse
+    
+    <!-- +ボタン(新規リスト作成) -->
+    <button onclick="openCreateListModal()" class="px-6 py-3 text-gray-700 hover:text-[#03588C] transition">+</button>
 </div>
 
-<!-- 編集・その他ボタン -->
-<div class="flex justify-end gap-4 mb-4 text-sm text-gray-400">
-    <button onclick="alert('編集モードはまだ実装されていません')" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
+<!-- リスト名変更ボタン -->
+<div class="flex justify-end gap-4 mb-4 text-sm">
+    <button onclick="openEditListModal()" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
         <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
         </svg>
-        <span class="text-gray-700">編集</span>
+        <span class="text-gray-700">リスト名変更</span>
     </button>
     <button onclick="alert('その他メニューはまだ実装されていません')" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
         <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,8 +37,7 @@
 <!-- タスクリスト -->
 <div class="space-y-3">
     @forelse ($tasks ?? [] as $task)
-    <div class="bg-gray-900 rounded-lg p-4 flex items-start gap-3 hover:bg-gray-800 transition">
-        <!-- チェックボックス -->
+    <div class="bg-white/90 backdrop-blur-sm rounded-lg p-4 flex items-start gap-3 hover:bg-white transition shadow-md">
         <input type="checkbox" class="w-5 h-5 mt-1 rounded border-gray-400 text-[#03588C] focus:ring-[#03588C] cursor-pointer">
         
         <div class="flex-1">
@@ -46,9 +54,66 @@
         </a>
     </div>
     @empty
-    <div class="text-center py-20">
-        <p class="text-gray-500 text-lg">ToDoはありません</p>
+    <div class="text-center py-20 bg-white/80 backdrop-blur-sm rounded-lg">
+        <p class="text-gray-600 text-lg">ToDoはありません</p>
     </div>
     @endforelse
 </div>
+
+<!-- モーダル: 新規リスト作成 -->
+<div id="createListModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-xl">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">新しいリストを作成</h2>
+        <form action="{{ route('lists.store') }}" method="POST">
+            @csrf
+            <input type="text" name="name" placeholder="リスト名を入力" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-[#03588C]" required>
+            <div class="flex gap-2">
+                <button type="submit" class="flex-1 bg-[#03588C] text-white py-2 rounded-lg hover:bg-[#024d73] transition">作成</button>
+                <button type="button" onclick="closeCreateListModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition">キャンセル</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- モーダル: リスト名変更 -->
+<div id="editListModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-xl">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">リスト名を変更</h2>
+        <form action="{{ route('lists.update', $currentListId ?? 1) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <input type="text" name="name" value="{{ $currentListName ?? 'やること' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-[#03588C]" required>
+            <div class="flex gap-2">
+                <button type="submit" class="flex-1 bg-[#03588C] text-white py-2 rounded-lg hover:bg-[#024d73] transition">変更</button>
+                <button type="button" onclick="closeEditListModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition">キャンセル</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // 新規リスト作成モーダル
+    function openCreateListModal() {
+        document.getElementById('createListModal').classList.remove('hidden');
+    }
+    function closeCreateListModal() {
+        document.getElementById('createListModal').classList.add('hidden');
+    }
+
+    // リスト名変更モーダル
+    function openEditListModal() {
+        document.getElementById('editListModal').classList.remove('hidden');
+    }
+    function closeEditListModal() {
+        document.getElementById('editListModal').classList.add('hidden');
+    }
+
+    // モーダル外クリックで閉じる
+    document.getElementById('createListModal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeCreateListModal();
+    });
+    document.getElementById('editListModal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeEditListModal();
+    });
+</script>
 @endsection
