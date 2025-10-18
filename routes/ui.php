@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PageController::class, 'welcome'])->name('welcome');
 Route::get('/login', [PageController::class, 'login'])->name('login');
 Route::post('/login', [PageController::class, 'loginSubmit'])->name('login.submit');
+Route::get('/register', [PageController::class, 'register'])->name('register');
+Route::post('/register', [PageController::class, 'register']);
+
 
 // タスク（TaskController に委譲）
 Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
@@ -27,3 +30,8 @@ Route::get('/tasks/search', [PageController::class, 'taskSearch'])->name('tasks.
 
 // 共有メンバー
 Route::get('/shared/members', [PageController::class, 'sharedMembers'])->name('shared.members');
+
+
+// 完了タスク削除
+Route::get('/tasks/delete-completed', [PageController::class, 'deleteCompletedView'])->name('tasks.deleteCompleted');
+Route::delete('/tasks/delete-completed', [PageController::class, 'deleteCompletedExecute'])->name('tasks.deleteCompleted');
