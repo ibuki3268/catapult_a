@@ -33,5 +33,5 @@ Route::get('/shared/members', [PageController::class, 'sharedMembers'])->name('s
 
 
 // 完了タスク削除
-Route::get('/tasks/delete-completed', [PageController::class, 'deleteCompletedView'])->name('tasks.deleteCompleted');
-Route::delete('/tasks/delete-completed', [PageController::class, 'deleteCompletedExecute'])->name('tasks.deleteCompleted');
+Route::get('/tasks/delete-completed', [PageController::class, 'deleteCompletedView'])->name('tasks.deleteCompleted.view');
+Route::delete('/tasks/delete-completed', [PageController::class, 'deleteCompletedExecute'])->name('tasks.deleteCompleted.view');
