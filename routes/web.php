@@ -28,3 +28,4 @@ Route::delete('/share/{user}', [TaskShareController::class, 'destroy'])
 
 
 require __DIR__.'/auth.php';
+require __DIR__.'/ui.php';
