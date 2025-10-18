@@ -48,13 +48,23 @@ class User extends Authenticatable
     }
 
     // ユーザーが共有されているタスクを取得
-    public function sharedTasks()
+    public function sharedUsers()
     {
         return $this->belongsToMany(
-            Task::class, 
+            User::class, 
             'task_share', 
-            'shared_with_user_id', 
-            'task_id'
-            )->withPivot('premission');
+            'user_id',
+            'shared_user_id'
+            );
+    }
+
+    public function sharedByUsers()
+    {
+        return $this->belongsToMany(
+            User::class, 
+            'task_share', 
+            'shared_user_id',
+            'user_id'
+            );
     }
 }

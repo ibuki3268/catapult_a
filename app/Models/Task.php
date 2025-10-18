@@ -35,19 +35,19 @@ class Task extends Model
         return $this->belongsToMany(
             User::class, 
             'task_share', 
-            'task_id', 
-            'shared_with_user_id'
-            )->withPivot('premission');
+            'user_id', 
+            'shared_user_id'
+            );
 
     }
 
-    // 指定したユーザーが見えるタスクを取得するスコープ
-    public function scopeVisibleTo($query, $userId)
-    {
-        return $query->where('user_id', $userId) // 1. 自分が作成したタスク
-                    ->orWhereHas('sharedWithUsers', function ($q) use ($userId) {
-                        // 2. 自分が共有されているタスク (sharedWithUsersリレーションのフィルター)
-                        $q->where('shared_with_user_id', $userId);
-                    });
-    }
+    // // 指定したユーザーが見えるタスクを取得するスコープ
+    // public function scopeVisibleTo($query, $userId)
+    // {
+    //     return $query->where('user_id', $userId) // 1. 自分が作成したタスク
+    //                 ->orWhereHas('sharedWithUsers', function ($q) use ($userId) {
+    //                     // 2. 自分が共有されているタスク (sharedWithUsersリレーションのフィルター)
+    //                     $q->where('shared_with_user_id', $userId);
+    //                 });
+    // }
 }

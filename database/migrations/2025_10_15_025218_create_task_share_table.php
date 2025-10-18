@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('task_share', function (Blueprint $table) {
             $table->id();
-            // 共有されるタスクのID
-            $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
+            // ユーザーの
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             // 共有先のユーザーID
-            $table->foreignId('shared_with_user_id')->constrained('users')->cascadeOnDelete();
-            // 共有の種類（例: 'read', 'edit'など）
-            $table->enum('premission', ['read', 'edit'])->default('read');
-
-            $table->unique(['task_id', 'shared_with_user_id']);
-
+            $table->foreignId('shared_user_id')->constrained('users')->cascadeOnDelete();
+            
+            $table->unique(['user_id', 'shared_user_id']);
+            
             $table->timestamps();
         });
     }
+    // // 共有の種類（例: 'read', 'edit'など）
+    // $table->enum('premission', ['read', 'edit'])->default('read');
 
     /**
      * Reverse the migrations.
