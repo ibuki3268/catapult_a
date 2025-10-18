@@ -109,6 +109,20 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', '完了タスクをすべて削除しました。');
     }
 
+    // Ajax: チェックボックスでdone状態をトグル
+    public function toggleDone(Task $task, Request $request)
+    {
+        if ($task->user_id !== $this->currentUserId()) {
+            return response()->json(['error' => '権限がありません'], 403);
+        }
+        $validated = $request->validate([
+            'done' => 'required|boolean',
+        ]);
+        $task->done = $validated['done'];
+        $task->save();
+        return response()->json(['success' => true, 'done' => $task->done]);
+    }
+
     /**
      * Return a user id to use for development when Auth::id() is null.
      * If no user exists, create a simple local dev user.

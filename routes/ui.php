@@ -20,6 +20,9 @@ Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.e
 Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
 Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
+// Ajax用: タスクのdone状態をトグル
+Route::patch('/tasks/{task}/toggle-done', [TaskController::class, 'toggleDone'])->name('tasks.toggleDone');
+
 Route::get('/tasks/delete-completed', [TaskController::class, 'deleteCompletedView'])->name('tasks.deleteCompleted.view');
 Route::delete('/tasks/delete-completed', [TaskController::class, 'deleteCompletedExecute'])->name('tasks.deleteCompleted.execute');
 
