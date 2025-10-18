@@ -82,7 +82,7 @@
     <div class="fixed bottom-8 left-0 right-0 flex justify-between px-8 pointer-events-none">
         <!-- ゴミ箱ボタン -->
             <a href="{{ route('tasks.deleteCompleted.view') }}" 
-           class="pointer-events-auto w-16 h-16 flex items-center justify-center hover:scale-110 transition"
+           class="pointer-events-auto w-16 h-16 flex items-center justify-center hover:scale-110 transition  bg-white"
            onclick="return confirm('完了したタスクを削除しますか?');">
             <svg class="w-12 h-12 text-[#5BCCF8] drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
