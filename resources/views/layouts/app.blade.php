@@ -5,20 +5,21 @@
     <title>@yield('title', 'Task App')</title>
     <meta name="description" content="タスク管理アプリ">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Tailwind CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-black text-white min-h-screen">
-    
-    <!-- ヘッダー -->
-    <header class="bg-white border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
+<body style="ba-[#FFFFFF] background-size: cover; background-position: center; background-attachment: fixed;" class="text-white min-h-screen">    
+    <header class="bg-[#D5528E] border-b border-gray-800 fixed top-0 left-0 right-0 z-50">       
         <div class="max-w-screen-xl mx-auto px-5 h-16 flex items-center justify-between">
             
             <!-- ロゴ -->
             <a href="{{ route('welcome') }}" class="block">
                 <img src="{{ asset('images/common/nezumi.jpg') }}" alt="Task App Logo" class="h-8 w-auto">
             </a>
+
+            <h1 class="text-2xl font-bold text-white absolute left-1/2 transform -translate-x-1/2">ToDo List</h1>
             
             <!-- メニュー(PC表示) -->
             <nav class="hidden md:block">
@@ -74,7 +75,7 @@
     </main>
 
     <!-- フッター -->
-    <footer class="bg-gray-900 text-gray-400 text-center py-5 mt-10">
+    <footer class="bg-[#D5528E] text-gray-400 text-center py-5 mt-10  fixed bottom-0 left-0 right-0 border-t border-pink-200 shadow-md backdrop-blur-sm">
         <p class="text-sm">&copy; 2025 Task App</p>
     </footer>
 
@@ -82,17 +83,17 @@
     <div class="fixed bottom-8 left-0 right-0 flex justify-between px-8 pointer-events-none">
         <!-- ゴミ箱ボタン -->
             <a href="{{ route('tasks.deleteCompleted.view') }}" 
-           class="pointer-events-auto w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition shadow-lg"
+           class="pointer-events-auto w-16 h-16 flex items-center justify-center hover:scale-110 transition  bg-white"
            onclick="return confirm('完了したタスクを削除しますか?');">
-            <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-12 h-12 text-[#5BCCF8] drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
         </a>
         
         <!-- プラスボタン -->
         <a href="{{ route('tasks.create') }}" 
-           class="pointer-events-auto w-16 h-16 bg-teal-400 rounded-full flex items-center justify-center hover:bg-teal-500 transition shadow-lg">
-            <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           class="pointer-events-auto w-16 h-16 flex items-center justify-center hover:scale-110 transition">
+            <svg class="w-8 h-8 text-[#5BCCF8] drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>
             </svg>
         </a>

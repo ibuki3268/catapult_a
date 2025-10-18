@@ -31,6 +31,14 @@ class PageController extends Controller
     return view('users.mypageUI');
     }
 
+    public function register() {
+    return view('auth.registerUI');
+    }
+
+    public function sharedMembers() {
+    return view('shared.membersUI');
+    }
+
     // 他ページを作る場合はここに追加
     // public function todo() { return view('tasks.index'); }
 }
