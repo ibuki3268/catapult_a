@@ -209,8 +209,8 @@
         </svg>
 
         <!-- WELCOMEテキスト -->
-        <h1 class="welcome-text">WELCOME!</h1>
-        <p class="sub-text">FIND YOUR INSPIRATION</p>
+        <h1 class="welcome-text">ToDo List</h1>
+        <p class="sub-text"></p>
 
         <!-- ボタン -->
         <div class="button-container">

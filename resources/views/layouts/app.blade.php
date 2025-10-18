@@ -9,8 +9,8 @@
     <!-- Tailwind CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body style="background-image: url('{{ asset('images/common/bg-brown.jpg') }}'); background-size: cover; background-position: center; background-attachment: fixed;" class="text-white min-h-screen">    <!-- ロゴ -->
-    <header class="bg-[#FFFFFF] border-b border-gray-800 fixed top-0 left-0 right-0 z-50">       
+<body style="ba-[#FFFFFF] background-size: cover; background-position: center; background-attachment: fixed;" class="text-white min-h-screen">    
+    <header class="bg-[#D5528E] border-b border-gray-800 fixed top-0 left-0 right-0 z-50">       
         <div class="max-w-screen-xl mx-auto px-5 h-16 flex items-center justify-between">
             
             <!-- ロゴ -->
@@ -72,7 +72,7 @@
     </main>
 
     <!-- フッター -->
-    <footer class="bg-gray-900 text-gray-400 text-center py-5 mt-10 fixed bottom-0 left-0 right-0 border-t border-pink-200 shadow-md backdrop-blur-sm rounded-t-3xl">
+    <footer class="bg-[#D5528E] text-gray-400 text-center py-5 mt-10  fixed bottom-0 left-0 right-0 border-t border-pink-200 shadow-md backdrop-blur-sm sm:rounded-t-3xl">
         <p class="text-sm">&copy; 2025 Task App</p>
     </footer>
 
