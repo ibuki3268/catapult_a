@@ -96,7 +96,11 @@ class TaskController extends Controller
 
     public function deleteCompletedView()
     {
-        return view('tasks.delete-completedUI');
+        $completedCount = Task::where('user_id', $this->currentUserId())
+            ->where('done', true)
+            ->count();
+
+        return view('tasks.delete-completedUI', compact('completedCount'));
     }
 
     public function deleteCompletedExecute()
