@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskShareController;
 use Illuminate\Support\Facades\Route;
 
 // トップ・ログイン
@@ -27,4 +28,12 @@ Route::get('/tasks/search', [PageController::class, 'taskSearch'])->name('tasks.
 
 // 共有メンバー
 Route::get('/shared/members', [PageController::class, 'sharedMembers'])->name('shared.members');
+
+// ユーザーIDを指定して、共有相手を追加
+Route::post('/share/{user}', [TaskShareController::class, 'create'])
+     ->name('share.create');
+    
+// 共有相手の削除
+Route::delete('/share/{user}', [TaskShareController::class, 'destroy'])
+     ->name('share.destroy');
 

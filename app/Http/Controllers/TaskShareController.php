@@ -12,10 +12,10 @@ class TaskShareController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request, User $addUser)
+    public function create(Request $request, User $user)
     {
         // タスクの共有相手の追加を行う
-        auth()->user()->sharedUsers()->attach($addUser->id);
+        auth()->user()->sharedUsers()->attach($user->id);
 
         return redirect()->back()->with('success', 'タスクが共有されました。');
     }
