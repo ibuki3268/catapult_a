@@ -96,13 +96,31 @@ class TaskController extends Controller
 
     public function deleteCompletedView()
     {
-        return view('tasks.delete-completedUI');
+        $completedCount = Task::where('user_id', $this->currentUserId())
+            ->where('done', true)
+            ->count();
+
+        return view('tasks.delete-completedUI', compact('completedCount'));
     }
 
     public function deleteCompletedExecute()
     {
         Task::where('user_id', $this->currentUserId())->where('done', true)->delete();
         return redirect()->route('tasks.index')->with('success', '完了タスクをすべて削除しました。');
+    }
+
+    // Ajax: チェックボックスでdone状態をトグル
+    public function toggleDone(Task $task, Request $request)
+    {
+        if ($task->user_id !== $this->currentUserId()) {
+            return response()->json(['error' => '権限がありません'], 403);
+        }
+        $validated = $request->validate([
+            'done' => 'required|boolean',
+        ]);
+        $task->done = $validated['done'];
+        $task->save();
+        return response()->json(['success' => true, 'done' => $task->done]);
     }
 
     /**

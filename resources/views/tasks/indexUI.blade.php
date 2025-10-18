@@ -20,49 +20,29 @@
 
 <!-- リスト名変更ボタン -->
 <div class="flex justify-end gap-4 mb-4 text-sm">
-    <button onclick="alert('編集機能は準備中です')" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
+    <button onclick="openEditListModal()" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
         <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
         </svg>
-        <span class="text-gray-700">編集</span>
+        <span class="text-gray-700">リスト名変更</span>
     </button>
-    <div class="relative z-50">
-        <button onclick="toggleDropdown()" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
-            <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-            </svg>
-            <span class="text-gray-700">その他</span>
-        </button>
-        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
-            <button onclick="openRenameListModal(); toggleDropdown();" class="w-full text-left px-4 py-2.5 hover:bg-gray-50 transition flex items-center gap-2">
-                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                </svg>
-                <span class="text-gray-700">リスト名変更</span>
-            </button>
-            <button onclick="alert('この機能はまだ実装されていません'); toggleDropdown();" class="w-full text-left px-4 py-2.5 hover:bg-gray-50 transition flex items-center gap-2 border-t border-gray-100">
-                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
-                </svg>
-                <span class="text-gray-700">共有設定</span>
-            </button>
-            <button onclick="alert('この機能はまだ実装されていません'); toggleDropdown();" class="w-full text-left px-4 py-2.5 hover:bg-gray-50 transition flex items-center gap-2 border-t border-gray-100">
-                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                </svg>
-                <span class="text-gray-700">エクスポート</span>
-            </button>
-        </div>
-    </div>
+    <button onclick="alert('その他メニューはまだ実装されていません')" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
+        <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+        </svg>
+        <span class="text-gray-700">その他</span>
+    </button>
 </div>
-
-
 
 <!-- タスクリスト -->
 <div class="space-y-3">
     @forelse ($tasks ?? [] as $task)
     <div class="bg-white/90 backdrop-blur-sm rounded-lg p-4 flex items-start gap-3 hover:bg-white transition shadow-md">
-        <input type="checkbox" class="w-5 h-5 mt-1 rounded border-gray-400 text-[#03588C] focus:ring-[#03588C] cursor-pointer">
+     <input type="checkbox"
+         class="w-5 h-5 mt-1 rounded border-gray-400 text-[#03588C] focus:ring-[#03588C] cursor-pointer task-done-checkbox"
+         data-task-id="{{ $task->id }}"
+         @if($task->done) checked @endif
+     >
         
         <div class="flex-1">
             <h3 class="font-medium text-gray-800">{{ $task->title }}</h3>
@@ -116,6 +96,35 @@
 </div>
 
 <script>
+    // タスクdoneトグル
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.task-done-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const taskId = this.dataset.taskId;
+                const done = this.checked ? 1 : 0;
+                fetch(`/tasks/${taskId}/toggle-done`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ done })
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error('更新に失敗しました');
+                    return res.json();
+                })
+                .then(data => {
+                    // 成功時は何もしない（UIは既に反映済み）
+                })
+                .catch(err => {
+                    alert('更新に失敗しました');
+                    this.checked = !this.checked; // 元に戻す
+                });
+            });
+        });
+    });
     // 新規リスト作成モーダル
     function openCreateListModal() {
         document.getElementById('createListModal').classList.remove('hidden');
@@ -130,16 +139,6 @@
     }
     function closeEditListModal() {
         document.getElementById('editListModal').classList.add('hidden');
-    }
-
-    // ドロップダウンメニュー（追加）
-    function toggleDropdown() {
-        document.getElementById('dropdownMenu').classList.toggle('hidden');
-    }
-
-    function openRenameListModal() {
-        openEditListModal(); // 既存の関数を使う
-        toggleDropdown(); // ドロップダウンを閉じる
     }
 
     // モーダル外クリックで閉じる
