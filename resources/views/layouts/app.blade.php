@@ -16,7 +16,7 @@
             
             <!-- ロゴ -->
             <a href="{{ route('welcome') }}" class="block">
-                <img src="{{ asset('images/common/nezumi.jpg') }}" alt="Task App Logo" class="h-8 w-auto">
+                <img src="{{ asset('images/common/nezumi.jpg') }}" alt="Task App Logo" class="h-8 w-auto" height="32" style="height:32px;width:auto;">
             </a>
 
             <h1 class="text-2xl font-bold text-white absolute left-1/2 transform -translate-x-1/2">ToDo List</h1>
