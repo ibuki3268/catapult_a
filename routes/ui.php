@@ -36,6 +36,8 @@ Route::get('/shared/members', [PageController::class, 'sharedMembers'])->name('s
 Route::get('/tasks/delete-completed', [PageController::class, 'deleteCompletedView'])->name('tasks.deleteCompleted.view');
 Route::delete('/tasks/delete-completed', [PageController::class, 'deleteCompletedExecute'])->name('tasks.deleteCompleted.view');
 
+//リスト
 Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
 Route::put('/lists/{id}', [ListController::class, 'update'])->name('lists.update');
 Route::delete('/lists/{id}', [ListController::class, 'destroy'])->name('lists.destroy');
+
