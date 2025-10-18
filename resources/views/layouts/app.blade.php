@@ -74,7 +74,7 @@
     </main>
 
     <!-- フッター -->
-    <footer class="bg-[#D5528E] text-gray-400 text-center py-5 mt-10  fixed bottom-0 left-0 right-0 border-t border-pink-200 shadow-md backdrop-blur-sm sm:rounded-t-3xl">
+    <footer class="bg-[#D5528E] text-gray-400 text-center py-5 mt-10  fixed bottom-0 left-0 right-0 border-t border-pink-200 shadow-md backdrop-blur-sm">
         <p class="text-sm">&copy; 2025 Task App</p>
     </footer>
 
