@@ -105,7 +105,13 @@ class TaskController extends Controller
 
     public function deleteCompletedExecute()
     {
-        Task::where('user_id', $this->currentUserId())->where('done', true)->delete();
+        if (app()->environment('production')) {
+            // 本番環境: ログインユーザーのタスクのみ削除
+            Task::where('user_id', $this->currentUserId())->where('done', true)->delete();
+        } else {
+            // 開発環境: 全ユーザーの完了タスクを削除
+            Task::where('done', true)->delete();
+        }
         return redirect()->route('tasks.index')->with('success', '完了タスクをすべて削除しました。');
     }
 

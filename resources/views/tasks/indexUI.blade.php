@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('title', 'やること')
 @section('content')
+@if (session('success'))
+    <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg text-center font-bold">
+        {{ session('success') }}
+    </div>
+@endif
 <!-- タブ(リスト一覧) -->
 <div class="flex border-b border-gray-800 mb-6 bg-white/80 backdrop-blur-sm rounded-t-lg overflow-x-auto">
     @forelse ($lists ?? [] as $list)
@@ -81,7 +86,8 @@
     </div>
     @endforelse
 </div>
-<!-- モーダル: 新規リスト作成 -->
+<!-- 新規リスト作成モーダルは未実装のため一時的に非表示 -->
+{{--
 <div id="createListModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 w-96 shadow-xl">
         <h2 class="text-xl font-bold mb-4 text-gray-800">新しいリストを作成</h2>
@@ -95,7 +101,9 @@
         </form>
     </div>
 </div>
-<!-- モーダル: リスト名変更 -->
+--}}
+<!-- リスト名変更モーダルも未実装のため一時的に非表示 -->
+{{--
 <div id="editListModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 w-96 shadow-xl">
         <h2 class="text-xl font-bold mb-4 text-gray-800">リスト名を変更</h2>
@@ -110,6 +118,7 @@
         </form>
     </div>
 </div>
+--}}
 <script>
     // タスクdoneトグル
     document.addEventListener('DOMContentLoaded', function() {
