@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\TaskList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,11 +19,34 @@ class TaskController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::where('user_id', $this->currentUserId())->orderBy('created_at', 'desc')->get();
-        return view('tasks.indexUI', compact('tasks'));
+    $currentListId = $request->query('list_id');
+
+    // ユーザーの全リストを取得
+    $lists = TaskList::where('user_id', $this->currentUserId())->get();
+
+    // リストが1件もない場合
+    if ($lists->isEmpty()) {
+        $tasks = collect(); // 空コレクション
+        return view('tasks.indexUI', compact('lists', 'tasks', 'currentListId'));
     }
+
+    // 選択されていない場合は最初のリストを選ぶ
+    if (!$currentListId) {
+        $currentListId = $lists->first()->id;
+    }
+
+    // 対応するタスクを取得
+    $tasks = Task::where('user_id', $this->currentUserId())
+                 ->where('list_id', $currentListId)
+                 ->orderBy('created_at', 'desc')
+                 ->get();
+
+    return view('tasks.indexUI', compact('lists', 'tasks', 'currentListId'));
+   }
+
+   
 
     public function create()
     {
