@@ -41,6 +41,7 @@ Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
 Route::put('/lists/{id}', [ListController::class, 'update'])->name('lists.update');
 Route::delete('/lists/{id}', [ListController::class, 'destroy'])->name('lists.destroy');
 
+
 use App\Http\Controllers\ListController;
 
 // リスト管理

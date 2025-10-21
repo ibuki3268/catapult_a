@@ -51,18 +51,19 @@ class ListController extends Controller
 
     // リスト削除
     public function destroy($id)
-    {
-        // リストを取得
-        $list = TaskList::findOrFail($id);
+{
+    // リストを取得
+    $list = TaskList::findOrFail($id);
 
-        // 自分のリストか確認
-        if ($list->user_id !== Auth::id()) {
-            abort(403, '権限がありません');
-        }
-
-        // リスト削除
-        $list->delete();
-
-        return redirect()->route('tasks.index')->with('success', 'リストを削除しました');
+    // 自分のリストか確認（nullの場合は1として扱う）
+    $userId = Auth::id() ?? 1;
+    if ($list->user_id !== $userId) {
+        abort(403, '権限がありません');
     }
+
+    // リスト削除
+    $list->delete();
+
+    return redirect()->route('tasks.index')->with('success', 'リストを削除しました');
+}
 }
