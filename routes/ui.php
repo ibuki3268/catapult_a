@@ -38,6 +38,9 @@ Route::get('/tasks/search', [PageController::class, 'taskSearch'])->name('tasks.
 Route::get('/shared/members', [PageController::class, 'sharedMembers'])->name('shared.members');
 
 
+Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
+Route::put('/lists/{id}', [ListController::class, 'update'])->name('lists.update');
+Route::delete('/lists/{id}', [ListController::class, 'destroy'])->name('lists.destroy');
 // ユーザーIDを指定して、共有相手を追加
 Route::post('/share/{user}', [TaskShareController::class, 'create'])
      ->name('share.create');
