@@ -3,6 +3,7 @@
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskShareController;
+use App\Http\Controllers\ListController;
 use Illuminate\Support\Facades\Route;
 
 // トップ・ログイン
@@ -36,14 +37,6 @@ Route::get('/tasks/search', [PageController::class, 'taskSearch'])->name('tasks.
 
 // 共有メンバー
 Route::get('/shared/members', [PageController::class, 'sharedMembers'])->name('shared.members');
-
-
-Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
-Route::put('/lists/{id}', [ListController::class, 'update'])->name('lists.update');
-Route::delete('/lists/{id}', [ListController::class, 'destroy'])->name('lists.destroy');
-
-
-use App\Http\Controllers\ListController;
 
 // リスト管理
 Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
