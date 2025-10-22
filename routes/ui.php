@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 // トップ・ログイン
 Route::get('/', [PageController::class, 'welcome'])->name('welcome');
-Route::get('/login', [PageController::class, 'login'])->name('login');
-Route::post('/login', [PageController::class, 'loginSubmit'])->name('login.submit');
-Route::get('/register', [PageController::class, 'register'])->name('register');
-Route::post('/register', [PageController::class, 'register']);
+// Route::get('/login', [PageController::class, 'login'])->name('login');
+// Route::post('/login', [PageController::class, 'loginSubmit'])->name('login.submit');
+// Route::get('/register', [PageController::class, 'register'])->name('register');
+// Route::post('/register', [PageController::class, 'register']);
 
 
 // タスク（TaskController に委譲）
