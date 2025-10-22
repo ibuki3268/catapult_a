@@ -4,9 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskShareController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -28,3 +28,5 @@ Route::delete('/share/{user}', [TaskShareController::class, 'destroy'])
 
 
 require __DIR__.'/auth.php';
+
+require __DIR__.'/ui.php';
