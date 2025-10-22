@@ -28,7 +28,16 @@ class PageController extends Controller
     }
 
     public function mypage() {
-    return view('users.mypageUI');
+        // ログインユーザー取得（開発環境ならUser::first()）
+        $user = \Auth::user() ?? \App\Models\User::first();
+        $userId = $user ? $user->id : null;
+
+        // タスク統計
+        $totalTasks = $userId ? \App\Models\Task::where('user_id', $userId)->count() : 0;
+        $completedTasks = $userId ? \App\Models\Task::where('user_id', $userId)->where('done', true)->count() : 0;
+        $pendingTasks = $userId ? \App\Models\Task::where('user_id', $userId)->where('done', false)->count() : 0;
+
+        return view('users.mypageUI', compact('user', 'totalTasks', 'completedTasks', 'pendingTasks'));
     }
 
     public function register() {

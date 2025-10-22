@@ -21,37 +21,50 @@ class TaskController extends Controller
 
     public function index(Request $request)
     {
-    $currentListId = $request->query('list_id');
+        $userId = $this->currentUserId();
+        
+        // ユーザーの全リストを取得
+        $lists = TaskList::where('user_id', $userId)->orderBy('created_at', 'asc')->get();
+        
+        // リストIDパラメータを取得
+        $currentListId = $request->query('list_id');
+        
+        // リストが1件もない場合
+        if ($lists->isEmpty()) {
+            $tasks = collect(); // 空コレクション
+            $currentListName = 'やること';
+            return view('tasks.indexUI', compact('lists', 'tasks', 'currentListId', 'currentListName'));
+        }
 
-    // ユーザーの全リストを取得
-    $lists = TaskList::where('user_id', $this->currentUserId())->get();
+        // 選択されていない場合は最初のリストを選ぶ
+        if (!$currentListId) {
+            $currentListId = $lists->first()->id;
+        }
 
-    // リストが1件もない場合
-    if ($lists->isEmpty()) {
-        $tasks = collect(); // 空コレクション
-        return view('tasks.indexUI', compact('lists', 'tasks', 'currentListId'));
+        // 現在のリスト名を取得
+        $currentList = $lists->firstWhere('id', $currentListId);
+        $currentListName = $currentList ? $currentList->name : 'やること';
+
+        // 対応するタスクを取得
+        $tasks = Task::where('user_id', $userId)
+                     ->where('list_id', $currentListId)
+                     ->orderBy('created_at', 'desc')
+                     ->get();
+        
+        return view('tasks.indexUI', compact('lists', 'tasks', 'currentListId', 'currentListName'));
     }
-
-    // 選択されていない場合は最初のリストを選ぶ
-    if (!$currentListId) {
-        $currentListId = $lists->first()->id;
-    }
-
-    // 対応するタスクを取得
-    $tasks = Task::where('user_id', $this->currentUserId())
-                 ->where('list_id', $currentListId)
-                 ->orderBy('created_at', 'desc')
-                 ->get();
-
-    return view('tasks.indexUI', compact('lists', 'tasks', 'currentListId'));
-   }
 
    
 
-    public function create()
+    public function create(Request $request)
     {
+<<<<<<< HEAD
         $lists = TaskList::where('user_id', $this->currentUserId())->get();
     return view('tasks.createUI', compact('lists'));
+=======
+        $listId = $request->query('list_id');
+        return view('tasks.createUI', compact('listId'));
+>>>>>>> mypage
     }
 
     public function store(Request $request)
@@ -61,12 +74,30 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'deadline' => 'nullable|date',
             'priority' => 'nullable|integer',
+<<<<<<< HEAD
             'list_id' => 'nullable|exists:lists,id',  // task_lists → lists に変更
+=======
+            'list_id' => 'nullable|exists:lists,id',
+>>>>>>> mypage
         ]);
 
+        $userId = $this->currentUserId();
+        
+        // list_idが指定されていない場合、ユーザーの最初のリストを使う
+        $listId = $data['list_id'] ?? null;
+        if (!$listId) {
+            $firstList = TaskList::where('user_id', $userId)->orderBy('created_at', 'asc')->first();
+            $listId = $firstList ? $firstList->id : null;
+        }
+
         $task = Task::create([
+<<<<<<< HEAD
             'user_id' => $this->currentUserId(),
             'list_id' => $data['list_id'] ?? TaskList::where('user_id', $this->currentUserId())->first()?->id, // ← 追加
+=======
+            'user_id' => $userId,
+            'list_id' => $listId,
+>>>>>>> mypage
             'title' => $data['title'],
             'body' => $data['description'] ?? null,
             'deadline' => $data['deadline'] ?? null,

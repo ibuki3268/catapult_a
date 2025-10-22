@@ -199,7 +199,7 @@
         </svg>
     </a>
     <!-- プラスボタン -->
-    <a href="{{ route('tasks.create') }}"
+    <a href="{{ route('tasks.create', ['list_id' => $currentListId ?? null]) }}"
        class="pointer-events-auto w-16 h-16 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition shadow-lg">
         <svg class="w-8 h-8 text-[#5BCCF8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="32" height="32" style="width:32px;height:32px" aria-hidden="true" focusable="false">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>

@@ -10,6 +10,7 @@ class Task extends Model
 {
     protected $fillable = [
         'user_id',
+        'list_id',
         'title',
         'body',
         'done',
@@ -26,6 +27,18 @@ class Task extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    // このタスクが属するリスト
+    public function list(): BelongsTo
+    {
+        return $this->belongsTo(TaskList::class, 'list_id');
+    }
+
+    // Blade側が $task->description を参照しているため、bodyへのアクセサを用意
+    public function getDescriptionAttribute(): ?string
+    {
+        return $this->attributes['body'] ?? null;
     }
 
 
