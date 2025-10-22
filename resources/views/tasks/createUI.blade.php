@@ -11,6 +11,9 @@
         <!--名称変更-->
         <form method="POST" action="{{ route('tasks.store') }}">
           @csrf
+          @if(isset($listId))
+            <input type="hidden" name="list_id" value="{{ $listId }}">
+          @endif
           <div class="mb-4">
             <label for="title" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">タイトル</label>
             <input type="text" name="title" id="title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
