@@ -58,13 +58,8 @@ class TaskController extends Controller
 
     public function create(Request $request)
     {
-<<<<<<< HEAD
         $lists = TaskList::where('user_id', $this->currentUserId())->get();
     return view('tasks.createUI', compact('lists'));
-=======
-        $listId = $request->query('list_id');
-        return view('tasks.createUI', compact('listId'));
->>>>>>> mypage
     }
 
     public function store(Request $request)
@@ -74,11 +69,7 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'deadline' => 'nullable|date',
             'priority' => 'nullable|integer',
-<<<<<<< HEAD
-            'list_id' => 'nullable|exists:lists,id',  // task_lists → lists に変更
-=======
             'list_id' => 'nullable|exists:lists,id',
->>>>>>> mypage
         ]);
 
         $userId = $this->currentUserId();
@@ -91,13 +82,8 @@ class TaskController extends Controller
         }
 
         $task = Task::create([
-<<<<<<< HEAD
-            'user_id' => $this->currentUserId(),
-            'list_id' => $data['list_id'] ?? TaskList::where('user_id', $this->currentUserId())->first()?->id, // ← 追加
-=======
             'user_id' => $userId,
             'list_id' => $listId,
->>>>>>> mypage
             'title' => $data['title'],
             'body' => $data['description'] ?? null,
             'deadline' => $data['deadline'] ?? null,
