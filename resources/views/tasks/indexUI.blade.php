@@ -107,7 +107,7 @@
         <form action="{{ route('lists.update', $currentListId ?? 1) }}" method="POST">
             @csrf
             @method('PUT')
-            <input type="text" name="name" value="{{ $currentListName ?? 'やること' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-[#03588C]" required>
+            <input type="text" name="name" value="{{ $currentListName ?? 'やること' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-[#03588C] text-gray-800" required>
             <div class="flex gap-2">
                 <button type="submit" class="flex-1 bg-[#03588C] text-white py-2 rounded-lg hover:bg-[#024D73] transition">変更</button>
                 <button type="button" onclick="closeEditListModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition">キャンセル</button>
