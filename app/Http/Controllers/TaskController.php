@@ -193,4 +193,30 @@ class TaskController extends Controller
 
         return $dev->id;
     }
+
+    // TaskController.php に追加
+
+// 一括完了
+public function bulkComplete(Request $request)
+{
+    $taskIds = $request->input('task_ids', []);
+    
+    Task::whereIn('id', $taskIds)
+        ->where('user_id', $this->currentUserId())
+        ->update(['done' => true]);
+    
+    return response()->json(['success' => true]);
+}
+
+// 一括削除
+public function bulkDelete(Request $request)
+{
+    $taskIds = $request->input('task_ids', []);
+    
+    Task::whereIn('id', $taskIds)
+        ->where('user_id', $this->currentUserId())
+        ->delete();
+    
+    return response()->json(['success' => true]);
+}
 }

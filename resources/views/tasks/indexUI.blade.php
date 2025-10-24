@@ -17,11 +17,11 @@
 <!-- リスト名変更ボタン -->
 <div class="flex justify-end gap-4 mb-4 text-sm relative">
     <!-- 編集ボタン -->
-    <button onclick="alert('編集モードはまだ実装されていません')" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
-        <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-        <span class="text-gray-700">編集</span>
+    <button onclick="toggleEditMode()" id="editModeBtn" class="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white transition cursor-pointer">
+    <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+    <span class="text-gray-700" id="editModeText">編集</span>
     </button>
     <!-- その他ボタン(メニュー付き) -->
     <div class="relative z-50">
@@ -63,18 +63,26 @@
 <div class="space-y-3">
     @forelse ($tasks ?? [] as $task)
     <div class="bg-white/90 backdrop-blur-sm rounded-lg p-4 flex items-start gap-3 hover:bg-white transition shadow-md">
-     <input type="checkbox"
-         class="w-5 h-5 mt-1 rounded border-gray-400 text-[#03588C] focus:ring-[#03588C] cursor-pointer task-done-checkbox"
-         data-task-id="{{ $task->id }}"
-         @if($task->done) checked @endif
-     >
+        <!-- 完了チェックボックス（通常時） -->
+        <input type="checkbox"
+            class="w-5 h-5 mt-1 rounded border-gray-400 text-[#03588C] focus:ring-[#03588C] cursor-pointer task-done-checkbox"
+            data-task-id="{{ $task->id }}"
+            @if($task->done) checked @endif
+        >
+        
+        <!-- 選択チェックボックス（編集モード時・非表示） -->
+        <input type="checkbox"
+            class="w-5 h-5 mt-1 rounded border-gray-400 text-[#03588C] focus:ring-[#03588C] cursor-pointer task-select-checkbox hidden"
+            data-task-id="{{ $task->id }}"
+        >
+        
         <div class="flex-1">
             <h3 class="font-medium text-gray-800">{{ $task->title }}</h3>
             @if($task->description)
             <p class="text-sm text-gray-600 mt-1">{{ $task->description }}</p>
             @endif
         </div>
-        <a href="{{ route('tasks.edit', $task->id) }}" class="text-gray-500 hover:text-[#03588C] transition">
+        <a href="{{ route('tasks.edit', $task->id) }}" class="text-gray-500 hover:text-[#03588C] transition task-edit-link">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>
@@ -85,6 +93,17 @@
         <p class="text-gray-600 text-lg">ToDoはありません</p>
     </div>
     @endforelse
+</div>
+
+<!-- 一括操作バー（編集モード時のみ表示） -->
+<div id="bulkActionBar" class="hidden fixed bottom-24 left-0 right-0 bg-white border-t border-gray-200 shadow-lg p-4 z-[70]">
+    <div class="max-w-screen-xl mx-auto flex justify-between items-center">
+        <span class="text-gray-700 font-semibold"><span id="selectedCount">0</span>件選択中</span>
+        <div class="flex gap-3">
+            <button onclick="bulkComplete()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition">完了にする</button>
+            <button onclick="bulkDelete()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">削除</button>
+        </div>
+    </div>
 </div>
 <!-- モーダル: 新規リスト作成 -->
 <div id="createListModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -116,6 +135,105 @@
     </div>
 </div>
 <script>
+    let isEditMode = false;
+
+// 編集モード切り替え
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const doneCheckboxes = document.querySelectorAll('.task-done-checkbox');
+    const selectCheckboxes = document.querySelectorAll('.task-select-checkbox');
+    const editLinks = document.querySelectorAll('.task-edit-link');
+    const bulkActionBar = document.getElementById('bulkActionBar');
+    const editModeText = document.getElementById('editModeText');
+    
+    if (isEditMode) {
+        // 編集モードON
+        doneCheckboxes.forEach(cb => cb.classList.add('hidden'));
+        selectCheckboxes.forEach(cb => cb.classList.remove('hidden'));
+        editLinks.forEach(link => link.classList.add('hidden'));
+        bulkActionBar.classList.remove('hidden');
+        editModeText.textContent = '完了';
+    } else {
+        // 編集モードOFF
+        doneCheckboxes.forEach(cb => cb.classList.remove('hidden'));
+        selectCheckboxes.forEach(cb => {
+            cb.classList.add('hidden');
+            cb.checked = false;
+        });
+        editLinks.forEach(link => link.classList.remove('hidden'));
+        bulkActionBar.classList.add('hidden');
+        editModeText.textContent = '編集';
+        updateSelectedCount();
+    }
+}
+
+// 選択数更新
+function updateSelectedCount() {
+    const count = document.querySelectorAll('.task-select-checkbox:checked').length;
+    document.getElementById('selectedCount').textContent = count;
+}
+
+// 一括完了
+function bulkComplete() {
+    const selectedIds = Array.from(document.querySelectorAll('.task-select-checkbox:checked'))
+        .map(cb => cb.dataset.taskId);
+    
+    if (selectedIds.length === 0) {
+        alert('タスクを選択してください');
+        return;
+    }
+    
+    if (!confirm(`${selectedIds.length}件のタスクを完了にしますか？`)) {
+        return;
+    }
+    
+    fetch('/tasks/bulk-complete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        },
+        body: JSON.stringify({ task_ids: selectedIds })
+    })
+    .then(res => res.json())
+    .then(data => {
+        location.reload();
+    })
+    .catch(err => {
+        alert('エラーが発生しました');
+    });
+    }
+
+// 一括削除
+function bulkDelete() {
+    const selectedIds = Array.from(document.querySelectorAll('.task-select-checkbox:checked'))
+        .map(cb => cb.dataset.taskId);
+    
+    if (selectedIds.length === 0) {
+        alert('タスクを選択してください');
+        return;
+    }
+    
+    if (!confirm(`${selectedIds.length}件のタスクを削除しますか？`)) {
+        return;
+    }
+    
+    fetch('/tasks/bulk-delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        },
+        body: JSON.stringify({ task_ids: selectedIds })
+    })
+    .then(res => res.json())
+    .then(data => {
+        location.reload();
+    })
+    .catch(err => {
+        alert('エラーが発生しました');
+    });
+    }
     // タスクdoneトグル
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.task-done-checkbox').forEach(function(checkbox) {
@@ -144,6 +262,11 @@
                 });
             });
         });
+    });
+
+    // 選択チェックボックスの変更を監視
+    document.querySelectorAll('.task-select-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', updateSelectedCount);
     });
     // 新規リスト作成モーダル
     function openCreateListModal() {
