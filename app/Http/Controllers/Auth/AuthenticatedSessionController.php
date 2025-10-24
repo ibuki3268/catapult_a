@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('/tasks'));
+        return redirect()->intended(route('tasks.index'));
     }
 
     /**
