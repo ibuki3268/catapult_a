@@ -10,7 +10,7 @@
     <div class="bg-white/90 backdrop-blur-sm rounded-lg p-6 shadow-md mb-6">
         <h3 class="text-lg font-semibold mb-4 text-gray-800">メンバー一覧</h3>
         <div class="space-y-3">
-            @forelse ($members ?? [] as $member)
+            @forelse ($sharedMembers ?? [] as $member)
             <div class="bg-gray-50 rounded-lg p-4 flex items-center justify-between border border-gray-200">
                 <div class="flex items-center gap-3">
                     <!-- アバター -->

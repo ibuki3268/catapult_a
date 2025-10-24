@@ -45,7 +45,15 @@ class PageController extends Controller
     }
 
     public function sharedMembers() {
-    return view('shared.membersUI');
+      // 現在のログインユーザーを取得
+      $user = Auth::user() ?? \App\Models\User::first();
+
+      // ユーザーの共有相手一覧を取得
+      $sharedMembers = $user->sharedUsers()->get();
+      
+      return view('shared.membersUI', [
+        'sharedMembers' => $sharedMembers
+      ]);
     }
 
     public function taskIndex(Request $request)
