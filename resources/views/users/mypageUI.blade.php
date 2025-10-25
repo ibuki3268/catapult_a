@@ -43,6 +43,13 @@
             <a href="{{ route('tasks.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               タスク一覧へ
             </a>
+            <!-- ログアウトフォームを追加 -->
+            <form method="POST" action="{{ route('logout') }}" class="w-full sm:w-auto">
+                @csrf
+                <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-1.5 px-3 rounded transition duration-150">
+                    ログアウト
+                </button>
+            </form>
           </div>
         </div>
       </div>
