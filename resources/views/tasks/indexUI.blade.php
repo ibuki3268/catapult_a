@@ -81,6 +81,18 @@
             @if($task->description)
             <p class="text-sm text-gray-600 mt-1">{{ $task->description }}</p>
             @endif
+            @if($task->deadline)
+            @php
+                $deadline = $task->deadline;
+            @endphp
+            <p class="text-sm mt-2">
+                @if(!$task->done && $deadline->isPast())
+                    <span class="text-red-600 font-semibold">期限切れ: {{ $deadline->format('Y/m/d') }}</span>
+                @else
+                    <span class="text-gray-500">期限: {{ $deadline->format('Y/m/d') }}</span>
+                @endif
+            </p>
+            @endif
         </div>
         <a href="{{ route('tasks.edit', $task->id) }}" class="text-gray-500 hover:text-[#03588C] transition task-edit-link">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

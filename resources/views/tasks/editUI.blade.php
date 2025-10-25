@@ -29,6 +29,14 @@
             @enderror
           </div>
 
+          <div class="mb-4">
+            <label for="deadline" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">期限</label>
+            <input type="date" name="deadline" id="deadline" value="{{ old('deadline', isset($task) && $task->deadline ? $task->deadline->format('Y-m-d') : '') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            @error('deadline')
+            <span class="text-red-500 text-xs italic">{{ $message }}</span>
+            @enderror
+          </div>
+
           <div class="flex gap-2">
             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">更新</button>
             <a href="{{ route('tasks.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
