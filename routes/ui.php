@@ -54,3 +54,6 @@ Route::post('/share/{user}', [TaskShareController::class, 'create'])
 Route::delete('/share/{user}', [TaskShareController::class, 'destroy'])
      ->name('share.destroy');
 
+//編集機能
+Route::post('/tasks/bulk-complete', [TaskController::class, 'bulkComplete']);
+Route::post('/tasks/bulk-delete', [TaskController::class, 'bulkDelete']);
