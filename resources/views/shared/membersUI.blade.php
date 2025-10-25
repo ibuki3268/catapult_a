@@ -22,9 +22,16 @@
                         <p class="text-sm text-gray-500">{{ $member->email }}</p>
                     </div>
                 </div>
-                <button onclick="confirmRemoveMember('{{ $member->id }}')" class="text-red-500 hover:text-red-700 font-semibold transition">
+                <form method="POST" action="{{ route('share.destroy', $member) }}" onsubmit="return confirm('本当にこのメンバーを削除しますか？');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="text-red-500 hover:text-red-700 font-semibold transition">
+                        削除
+                    </button>
+                </form>
+                <!-- <button onclick="confirmRemoveMember('{{ $member->id }}')" class="text-red-500 hover:text-red-700 font-semibold transition">
                     削除
-                </button>
+                </button> -->
             </div>
             @empty
             <p class="text-gray-500 text-center py-6">共有メンバーがいません</p>

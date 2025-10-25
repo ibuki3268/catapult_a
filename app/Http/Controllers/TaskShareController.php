@@ -72,6 +72,7 @@ class TaskShareController extends Controller
     {
         //
         auth()->user()->sharedUsers()->detach($user->id);
+        return redirect()->route('shared.members');
     }
 }
     

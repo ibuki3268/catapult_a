@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\TaskList;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,25 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $userId = $this->currentUserId();
+
+        // 自分自身のタスクと、自分に共有されているユーザー（owner）のIDを取得
+        $sharedOwnerIds = DB::table('task_share')
+            ->where('shared_user_id', $userId)
+            ->pluck('user_id')  // 指定したカラムの値だけを配列として取り出す
+            ->toArray();
+
+        // 自分と共有元をマージ（重複除去）
+        $ownerIds = array_unique(array_merge([$userId], $sharedOwnerIds));
+
+        // 必要ならリストIDで絞る
+        $currentListId = $request->get('list_id', null);
+
+        $tasksQuery = Task::whereIn('user_id', $ownerIds);
+        if ($currentListId) {
+            $tasksQuery->where('list_id', $currentListId);
+        }
+
+        $tasks = $tasksQuery->orderBy('created_at', 'desc')->get();
         
         // ユーザーの全リストを取得
         $lists = TaskList::where('user_id', $userId)->orderBy('created_at', 'asc')->get();
@@ -31,25 +51,27 @@ class TaskController extends Controller
         
         // リストが1件もない場合
         if ($lists->isEmpty()) {
-            $tasks = collect(); // 空コレクション
             $currentListName = 'やること';
             return view('tasks.indexUI', compact('lists', 'tasks', 'currentListId', 'currentListName'));
         }
 
-        // 選択されていない場合は最初のリストを選ぶ
-        if (!$currentListId) {
-            $currentListId = $lists->first()->id;
-        }
-
-        // 現在のリスト名を取得
-        $currentList = $lists->firstWhere('id', $currentListId);
+        $currentList = $currentListId ? TaskList::find($currentListId) : ($lists->first() ?? null);
         $currentListName = $currentList ? $currentList->name : 'やること';
 
-        // 対応するタスクを取得
-        $tasks = Task::where('user_id', $userId)
-                     ->where('list_id', $currentListId)
-                     ->orderBy('created_at', 'desc')
-                     ->get();
+        // // 選択されていない場合は最初のリストを選ぶ
+        // if (!$currentListId) {
+        //     $currentListId = $lists->first()->id;
+        // }
+
+        // // 現在のリスト名を取得
+        // $currentList = $lists->firstWhere('id', $currentListId);
+        // $currentListName = $currentList ? $currentList->name : 'やること';
+
+        // // 対応するタスクを取得
+        // $tasks = Task::where('user_id', $userId)
+        //              ->where('list_id', $currentListId)
+        //              ->orderBy('created_at', 'desc')
+        //              ->get();
         
         return view('tasks.indexUI', compact('lists', 'tasks', 'currentListId', 'currentListName'));
     }
