@@ -15,12 +15,14 @@ class Task extends Model
         'done',
         'deadline',
         'priority',
+        'deadline_notified_at',
     ];
 
     protected $casts = [
         'done' => 'boolean',
         'deadline' => 'date',
         'priority' => 'integer',
+        'deadline_notified_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

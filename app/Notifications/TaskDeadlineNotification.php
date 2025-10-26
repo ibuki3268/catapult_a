@@ -7,18 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TaskDeadlineNotification extends Notification
+class TaskDeadlineNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     public $task;
+    public $type; // 'approaching' or 'expired'
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($task)
+    public function __construct($task, $type = 'expired')
     {
         $this->task = $task;
+        $this->type = $type;
     }
 
     /**
@@ -28,7 +30,7 @@ class TaskDeadlineNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -36,10 +38,21 @@ class TaskDeadlineNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $subject = $this->type === 'approaching' 
+            ? 'タスクの期限が近づいています' 
+            : 'タスクの期限が過ぎています';
+            
+        $greeting = $this->type === 'approaching'
+            ? 'タスクの期限が24時間以内に迫っています。'
+            : 'タスクの期限が過ぎています。確認してください。';
+
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->subject($subject)
+            ->line($greeting)
+            ->line("タスク: {$this->task->title}")
+            ->line("期限: {$this->task->deadline->format('Y年m月d日')}")
+            ->action('タスクを確認', url('/tasks/' . $this->task->id))
+            ->line('早めの対応をお願いします。');
     }
 
     /**
@@ -49,17 +62,22 @@ class TaskDeadlineNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        return [
-            //
-        ];
+        return $this->toDatabase($notifiable);
     }
 
     public function toDatabase($notifiable)
     {
+        $message = $this->type === 'approaching'
+            ? "「{$this->task->title}」の期限が24時間以内に迫っています！"
+            : "「{$this->task->title}」の期限が過ぎています！";
+
         return [
-            'message' => "「{$this->task->title}」の期限が過ぎています！",
+            'type' => $this->type,
+            'message' => $message,
             'task_id' => $this->task->id,
-            'deadline' => $this->task->deadline,
+            'task_title' => $this->task->title,
+            'deadline' => $this->task->deadline->toDateString(),
+            'url' => url('/tasks/' . $this->task->id),
         ];
     }
 }

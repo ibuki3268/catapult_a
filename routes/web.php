@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskShareController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,3 +31,8 @@ Route::delete('/share/{user}', [TaskShareController::class, 'destroy'])
 
 require __DIR__.'/auth.php';
 require __DIR__.'/ui.php';
+
+// 通知機能
+Route::get('/notifications', [NotificationController::class, 'index']);
+Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+Route::get('/create-notifications', [TaskController::class, 'createNotifications']);

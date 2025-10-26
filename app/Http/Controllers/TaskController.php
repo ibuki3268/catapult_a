@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use App\Models\Notification;
 
 class TaskController extends Controller
 {
@@ -149,4 +152,63 @@ class TaskController extends Controller
 
         return $dev->id;
     }
+
+    // 通知を作成（テスト用・本番用の両方）
+public function createNotifications()
+{
+    $now = Carbon::now();
+
+    $tasks = Task::where('done', false)
+                 ->whereNotNull('deadline')
+                 ->get();
+
+    $created = [];
+
+    foreach ($tasks as $task) {
+        $deadline = Carbon::parse($task->deadline)->startOfDay();
+        $today = $now->copy()->startOfDay();
+        $daysUntil = $today->diffInDays($deadline, false);
+
+        // 期限3日前
+        if ($daysUntil == 3) {
+            $this->createNotificationIfNotExists($task, '期限まであと3日です');
+            $created[] = "{$task->title}: 3日前の通知";
+        }
+
+        // 期限1日前
+        if ($daysUntil == 1) {
+            $this->createNotificationIfNotExists($task, '期限まであと1日です！');
+            $created[] = "{$task->title}: 1日前の通知";
+        }
+
+        // 期限当日
+        if ($daysUntil == 0) {
+            $this->createNotificationIfNotExists($task, '今日が期限です！');
+            $created[] = "{$task->title}: 当日の通知";
+        }
+    }
+
+    return response()->json([
+        'success' => true,
+        'checked' => $tasks->count(),
+        'created' => $created
+    ]);
+}
+
+private function createNotificationIfNotExists($task, $message)
+{
+    $today = Carbon::today();
+    $exists = Notification::where('user_id', $task->user_id)
+                          ->where('message', 'like', "%{$task->title}%")
+                          ->whereDate('created_at', $today)
+                          ->exists();
+
+    if (!$exists) {
+        Notification::create([
+            'user_id' => $task->user_id,
+            'message' => "【{$task->title}】{$message}",
+            'is_read' => false
+        ]);
+    }
+}
 }
