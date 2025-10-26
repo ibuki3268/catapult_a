@@ -1,11 +1,6 @@
 @extends('layouts.app')
 @section('title', 'やること')
 @section('content')
-@if (session('success'))
-    <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg text-center font-bold">
-        {{ session('success') }}
-    </div>
-@endif
 <!-- タブ(リスト一覧) -->
 <div class="flex border-b border-gray-800 mb-6 bg-white/80 backdrop-blur-sm rounded-t-lg overflow-x-auto">
     @forelse ($lists ?? [] as $list)
@@ -48,12 +43,17 @@
                     </button>
                 </li>
                 <li>
-                    <button onclick="alert('リスト削除機能はまだ実装されていません'); toggleOtherMenu();" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition flex items-center gap-2">
+                    <!-- 変更後 -->
+                <form action="{{ route('lists.destroy', $currentListId ?? 1) }}" method="POST" onsubmit="return confirm('このリストを削除しますか？リスト内のタスクもすべて削除されます。');">
+                     @csrf
+                     @method('DELETE')
+                     <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition flex items-center gap-2">
                         <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
                         <span class="text-red-600">リスト削除</span>
                     </button>
+                </form>
                 </li>
             </ul>
         </div>
@@ -86,8 +86,7 @@
     </div>
     @endforelse
 </div>
-<!-- 新規リスト作成モーダルは未実装のため一時的に非表示 -->
-{{--
+<!-- モーダル: 新規リスト作成 -->
 <div id="createListModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 w-96 shadow-xl">
         <h2 class="text-xl font-bold mb-4 text-gray-800">新しいリストを作成</h2>
@@ -101,9 +100,7 @@
         </form>
     </div>
 </div>
---}}
-<!-- リスト名変更モーダルも未実装のため一時的に非表示 -->
-{{--
+<!-- モーダル: リスト名変更 -->
 <div id="editListModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 w-96 shadow-xl">
         <h2 class="text-xl font-bold mb-4 text-gray-800">リスト名を変更</h2>
@@ -118,7 +115,6 @@
         </form>
     </div>
 </div>
---}}
 <script>
     // タスクdoneトグル
     document.addEventListener('DOMContentLoaded', function() {
@@ -203,7 +199,7 @@
         </svg>
     </a>
     <!-- プラスボタン -->
-    <a href="{{ route('tasks.create') }}"
+    <a href="{{ route('tasks.create', ['list_id' => $currentListId ?? null]) }}"
        class="pointer-events-auto w-16 h-16 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition shadow-lg">
         <svg class="w-8 h-8 text-[#5BCCF8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="32" height="32" style="width:32px;height:32px" aria-hidden="true" focusable="false">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>
